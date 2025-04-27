@@ -7,32 +7,30 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { queryLocations } from "@/app/lib/queries";
 
-export default function LocationsTable() {
+// async await query for locations data...
+export default async function LocationsTable() {
+  const locations = await queryLocations();
+
   return (
     <Table>
       <TableCaption>A list of your added locations.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Nickname</TableHead>
-          <TableHead>City</TableHead>
-          <TableHead>Street</TableHead>
+          <TableHead>Location</TableHead>
           <TableHead className="text-right">Zip Code</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
-        <TableRow>
-          <TableCell className="font-medium">Fam</TableCell>
-          <TableCell>Oakland Gardens</TableCell>
-          <TableCell>NY</TableCell>
-          <TableCell className="text-right">11364</TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="font-medium">Work</TableCell>
-          <TableCell>NYC</TableCell>
-          <TableCell>NY</TableCell>
-          <TableCell className="text-right">10001</TableCell>
-        </TableRow>
+        {locations?.map((loc) => (
+          <TableRow>
+            <TableCell className="font-medium">Nickname</TableCell>
+            <TableCell>{loc.location}</TableCell>
+            <TableCell className="text-right">{loc.zipcode}</TableCell>
+          </TableRow>
+        ))}
       </TableBody>
     </Table>
   );
