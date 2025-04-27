@@ -60,6 +60,9 @@ export default function LocationsAddForm() {
                     autoComplete="street-address" //?
                   />
                 </FormControl>
+                <FormDescription id={`${field.name}-description`}>
+                  Add a new location (max 10 locations).
+                </FormDescription>
                 <div id={`${field.name}-error`} aria-live="polite">
                   <FormMessage />
                 </div>
