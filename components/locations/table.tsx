@@ -7,11 +7,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { queryLocations } from "@/app/lib/queries";
+import { fetchLocations } from "@/app/lib/queries";
+// import Link from "next/link";
 
 // async await retrieving locations data...
 export default async function LocationsTable() {
-  const locations = await queryLocations();
+  const locations = await fetchLocations();
 
   return (
     <Table>
@@ -34,7 +35,9 @@ export default async function LocationsTable() {
             <TableCell className="font-medium">Nickname</TableCell>
             <TableCell>{loc.location}</TableCell>
             <TableCell>{loc.zipcode}</TableCell>
-            <TableCell className="text-right"></TableCell>
+            <TableCell className="text-right">
+              {/* <Link href={`/locations/${id}/edit`}>edit</Link> */}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
