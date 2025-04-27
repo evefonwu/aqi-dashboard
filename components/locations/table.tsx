@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { queryLocations } from "@/app/lib/queries";
 
-// async await query for locations data...
+// async await retrieving locations data...
 export default async function LocationsTable() {
   const locations = await queryLocations();
 
