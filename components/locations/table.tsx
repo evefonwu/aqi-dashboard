@@ -20,15 +20,17 @@ export default async function LocationsTable() {
         <TableRow>
           <TableHead className="w-[100px]">Nickname</TableHead>
           <TableHead>Location</TableHead>
-          <TableHead className="text-right">Zip Code</TableHead>
+          <TableHead>Zip Code</TableHead>
+          <TableHead className="text-right">Edit</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {locations?.map((loc) => (
-          <TableRow>
+          <TableRow key={loc.id}>
             <TableCell className="font-medium">Nickname</TableCell>
             <TableCell>{loc.location}</TableCell>
-            <TableCell className="text-right">{loc.zipcode}</TableCell>
+            <TableCell>{loc.zipcode}</TableCell>
+            <TableCell className="text-right"></TableCell>
           </TableRow>
         ))}
       </TableBody>

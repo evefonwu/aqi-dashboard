@@ -12,8 +12,9 @@ export default function Page() {
       <Suspense fallback={<LocationsTableSkeleton />}>
         <LocationsTable />
       </Suspense>
+      {/* wrap a ui button, functionality is a next/link */}
       <Link href="/locations/create">
-        <Button>Add +</Button>
+        <Button aria-label="Add new location">Add +</Button>
       </Link>
     </div>
   );

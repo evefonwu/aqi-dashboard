@@ -1,5 +1,3 @@
-// https://ui.shadcn.com/docs/components/form
-
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -18,6 +16,7 @@ import { createLocation } from "@/app/lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { startTransition, useTransition } from "react";
 
 const formSchema = z.object({
   location: z.string().min(5, {
@@ -26,25 +25,36 @@ const formSchema = z.object({
 });
 
 export default function CreateForm() {
+  // Consider adding loading state handling for the submit button:
+  const [isPending, startTransition] = useTransition();
+
   // define a form object with location
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       location: "",
     },
+    mode: "onBlur", // Validate when field loses focus
+    reValidateMode: "onChange", // Re-validate when input changes after validation
   });
-
-  // x function onSubmit(values: z.infer<typeof formSchema>) {
-  //   console.log(values);
-  // }
 
   return (
     <Form {...form}>
       <form
-        // using React Server Actions fullstack app with db
-        action={createLocation}
-        // x onSubmit={form.handleSubmit(onSubmit)}
-        aria-labelledby="contact-form-heading"
+        action={async (formData) => {
+          // validate form before sending form to server action
+          const isValid = await form.trigger();
+          if (!isValid) {
+            return;
+          }
+          const validatedFields = form.getValues();
+          const result = formSchema.safeParse(validatedFields);
+          if (!result.success) {
+            return;
+          }
+          // createLocation is a server action fn
+          startTransition(() => createLocation(formData));
+        }}
         noValidate
       >
         <div className="flex flex-col">
@@ -60,7 +70,6 @@ export default function CreateForm() {
                     placeholder="Enter city, state or zip code"
                     {...field}
                     aria-describedby={`${field.name}-error`}
-                    autoComplete="street-address" //?
                   />
                 </FormControl>
                 <FormDescription id={`${field.name}-description`}>
@@ -77,9 +86,7 @@ export default function CreateForm() {
               type="button"
               variant="outline"
               onClick={() => {
-                // form.reset() clear user inputs:
                 form.reset();
-                // clear validation errors:
                 form.clearErrors();
               }}
             >
@@ -89,8 +96,9 @@ export default function CreateForm() {
               variant="default"
               aria-label="Add new location"
               type="submit"
+              disabled={isPending}
             >
-              Add
+              {isPending ? "Adding..." : "Add"}
             </Button>
           </div>
         </div>
