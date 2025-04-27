@@ -15,7 +15,11 @@ export default async function LocationsTable() {
 
   return (
     <Table>
-      <TableCaption>A list of your added locations.</TableCaption>
+      <TableCaption>
+        {locations.length > 0
+          ? "A list of your added locations."
+          : "To add your locations, click the 'Add' button."}
+      </TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Nickname</TableHead>

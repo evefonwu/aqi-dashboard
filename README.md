@@ -76,3 +76,21 @@ resolve error from missing quotes for string value "require"; not the function r
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: require });
 
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
+
+# fix missing form validation and disabling of form submission button
+
+claude.ai code review and fixes
+
+see fixed and improved
+
+- components/locations/create-form.tsx
+
+"Validation errors appear when the user blurs (leaves) the field after entering invalid data. Validation is triggered when clicking the submit button even with empty fields. The form won't submit to the server action unless validation passes."
+
+# QA every step of the way
+
+Code review
+Checking console.log, any errors, warnings
+Running Lighthouse, how's the Accessibility score?
+
+building on a strong foundation, one brick at a time

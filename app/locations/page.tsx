@@ -6,16 +6,16 @@ import { Suspense } from "react";
 
 export default function Page() {
   return (
-    <div className="grid p-10 gap-10 w-150">
-      <h1>Here are your locations</h1>
-
-      <Suspense fallback={<LocationsTableSkeleton />}>
-        <LocationsTable />
-      </Suspense>
-      {/* wrap a ui button, functionality is a next/link */}
-      <Link href="/locations/create">
-        <Button aria-label="Add new location">Add +</Button>
-      </Link>
-    </div>
+    <main className="grid p-10 gap-3 w-[500px]">
+      <h1 className="text-xl">Your locations</h1>
+      <section className="grid gap-3">
+        <Suspense fallback={<LocationsTableSkeleton />}>
+          <LocationsTable />
+        </Suspense>
+        <Link href="/locations/create">
+          <Button aria-label="Add new location">Add +</Button>
+        </Link>
+      </section>
+    </main>
   );
 }

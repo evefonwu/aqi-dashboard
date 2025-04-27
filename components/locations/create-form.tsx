@@ -16,12 +16,17 @@ import { createLocation } from "@/app/lib/actions";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
-import { startTransition, useTransition } from "react";
+import { useTransition } from "react";
+import { redirect } from "next/navigation";
 
 const formSchema = z.object({
-  location: z.string().min(5, {
-    message: "Location is required.",
-  }),
+  location: z
+    .string({
+      message: "Location is required.",
+    })
+    .min(5, {
+      message: "Please enter a valid location.",
+    }),
 });
 
 export default function CreateForm() {
@@ -57,13 +62,15 @@ export default function CreateForm() {
         }}
         noValidate
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-5">
           <FormField
             control={form.control}
             name="location"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel htmlFor={field.name}>Location:</FormLabel>
+                <FormLabel htmlFor={field.name} className="text-xl">
+                  Location
+                </FormLabel>
                 <FormControl>
                   <Input
                     id={field.name}
@@ -73,7 +80,7 @@ export default function CreateForm() {
                   />
                 </FormControl>
                 <FormDescription id={`${field.name}-description`}>
-                  Add a new location (max 10 locations).
+                  Add a new location (max 10)
                 </FormDescription>
                 <div id={`${field.name}-error`} aria-live="polite">
                   <FormMessage />
@@ -88,9 +95,10 @@ export default function CreateForm() {
               onClick={() => {
                 form.reset();
                 form.clearErrors();
+                redirect("/locations");
               }}
             >
-              Clear
+              Cancel
             </Button>
             <Button
               variant="default"
