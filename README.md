@@ -26,7 +26,7 @@ async function insertUser({ name, age }) {
 }
 ```
 
-# did i create a locations table?
+# create a locations table
 
 ```sql
 -- CREATE TABLE IF NOT EXISTS users (
@@ -41,3 +41,30 @@ CREATE TABLE IF NOT EXISTS locations (
   date DATE NOT NULL
 );
 ```
+
+# worked on locations page and add new location
+
+key routes implemented:
+
+- app/locations
+  page with locations listing and link to add
+- app/locations/create
+  page with form to add new location
+
+organization:
+
+app/lib/
+
+- sql.md
+  scratch pad for raw sql, eg create table via neon console
+- actions.ts
+  server actions that run sql to create, update, delete records from db
+- queries.ts
+
+components/locations
+
+- create-form.tsx (react client component, form/event handling)
+  shadcn for styled accessible components,
+  react-hook-forms for validations,
+  form action to invoke server actions
+- table.tsx
