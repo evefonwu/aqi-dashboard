@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 
 // create a sql postgres db instance
 import postgres from "postgres";
-const sql = postgres(process.env.POSTGRES_URL!, { ssl: require });
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 // what the form data schema should be:
 const FormSchema = z.object({

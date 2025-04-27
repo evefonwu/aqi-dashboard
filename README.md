@@ -68,3 +68,11 @@ components/locations
   react-hook-forms for validations,
   form action to invoke server actions
 - table.tsx
+
+# resolve error: "Critical dependency: require function is used in a way in which dependencies cannot be statically extracted."
+
+resolve error from missing quotes for string value "require"; not the function require
+
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: require });
+
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
