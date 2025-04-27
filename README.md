@@ -94,3 +94,10 @@ Checking console.log, any errors, warnings
 Running Lighthouse, how's the Accessibility score?
 
 building on a strong foundation, one brick at a time
+
+# user experience
+
+from create-form page
+add a cancel button to redirect back to table listing
+
+this can be a dialog box?
