@@ -13,6 +13,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { createLocation } from "@/app/lib/actions";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -24,7 +25,7 @@ const formSchema = z.object({
   }),
 });
 
-export default function LocationsAddForm() {
+export default function CreateForm() {
   // define a form object with location
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -33,14 +34,16 @@ export default function LocationsAddForm() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-  }
+  // x function onSubmit(values: z.infer<typeof formSchema>) {
+  //   console.log(values);
+  // }
 
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(onSubmit)}
+        // using React Server Actions fullstack app with db
+        action={createLocation}
+        // x onSubmit={form.handleSubmit(onSubmit)}
         aria-labelledby="contact-form-heading"
         noValidate
       >
