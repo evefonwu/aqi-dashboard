@@ -8,7 +8,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { fetchLocations } from "@/app/lib/queries";
-// import Link from "next/link";
+import { DeleteForm } from "./delete-form";
 
 // async await retrieving locations data...
 export default async function LocationsTable() {
@@ -26,7 +26,7 @@ export default async function LocationsTable() {
           <TableHead className="w-[100px]">Nickname</TableHead>
           <TableHead>Location</TableHead>
           <TableHead>Zip Code</TableHead>
-          <TableHead className="text-right">Edit</TableHead>
+          <TableHead className="text-right">Delete</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
@@ -36,7 +36,7 @@ export default async function LocationsTable() {
             <TableCell>{loc.location}</TableCell>
             <TableCell>{loc.zipcode}</TableCell>
             <TableCell className="text-right">
-              {/* <Link href={`/locations/${id}/edit`}>edit</Link> */}
+              <DeleteForm id={loc.id} />
             </TableCell>
           </TableRow>
         ))}

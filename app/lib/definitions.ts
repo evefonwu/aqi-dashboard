@@ -4,8 +4,3 @@ export type Location = {
   zipcode: string;
   date: string;
 };
-
-export type LocationForm = {
-  id: string;
-  location: string;
-};

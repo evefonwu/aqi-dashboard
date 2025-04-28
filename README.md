@@ -1,3 +1,9 @@
+reviewing code server action
+its a function that will get form data object and run sql with it
+such as create new location record with the form data. that's all.
+
+it's actually just a few lines of code. add on type validation of form data with zod schema. add on routes cache revalidation, and route redirection.
+
 # Project In Progress ~
 
 Notes/Log -
@@ -10,9 +16,11 @@ https://www.npmjs.com/package/postgres
 
 key routes implemented:
 
-- app/locations
+app/
+
+- locations/
   page with locations listing and link to add
-- app/locations/create
+- locations/create/
   page with form to add new location
 
 organization:
@@ -46,4 +54,8 @@ add a cancel button to redirect back to table listing
 
 this can be a dialog box?
 
-# move onto edit the items
+# edit
+
+don't edit. there's is only one field.
+
+just add and delete. it's going to be a select combo box to add new locations

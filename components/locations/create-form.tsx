@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useTransition } from "react";
 import { redirect } from "next/navigation";
+import { Loader2, PlusCircle } from "lucide-react";
 
 const formSchema = z.object({
   location: z
@@ -30,7 +31,7 @@ const formSchema = z.object({
 });
 
 export default function CreateForm() {
-  // Consider adding loading state handling for the submit button:
+  // loading state
   const [isPending, startTransition] = useTransition();
 
   // define a form object with location
@@ -39,15 +40,15 @@ export default function CreateForm() {
     defaultValues: {
       location: "",
     },
-    mode: "onBlur", // Validate when field loses focus
-    reValidateMode: "onChange", // Re-validate when input changes after validation
+    mode: "onBlur", // when field loses focus
+    reValidateMode: "onChange", // when input changes after validation
   });
 
   return (
     <Form {...form}>
       <form
         action={async (formData) => {
-          // validate form before sending form to server action
+          // before sending form to server action
           const isValid = await form.trigger();
           if (!isValid) {
             return;
@@ -57,7 +58,7 @@ export default function CreateForm() {
           if (!result.success) {
             return;
           }
-          // createLocation is a server action fn
+          // wrap the async task
           startTransition(() => createLocation(formData));
         }}
         noValidate
@@ -106,7 +107,16 @@ export default function CreateForm() {
               type="submit"
               disabled={isPending}
             >
-              {isPending ? "Adding..." : "Add"}
+              {isPending ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <span className="sr-only">Adding...</span>
+                </>
+              ) : (
+                <>
+                  <span>Submit</span>
+                </>
+              )}
             </Button>
           </div>
         </div>

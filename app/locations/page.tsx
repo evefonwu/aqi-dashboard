@@ -3,7 +3,7 @@ import { LocationsTableSkeleton } from "@/components/skeletons";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
-
+import { PlusCircle } from "lucide-react";
 export default function Page() {
   return (
     <main className="grid p-10 gap-3 w-[500px]">
@@ -13,7 +13,9 @@ export default function Page() {
           <LocationsTable />
         </Suspense>
         <Link href="/locations/create">
-          <Button aria-label="Add new location">Add +</Button>
+          <Button aria-label="Add new location">
+            Add <PlusCircle className="mr-2 h-4 w-4" />
+          </Button>
         </Link>
       </section>
     </main>
