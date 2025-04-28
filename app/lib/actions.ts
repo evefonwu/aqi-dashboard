@@ -1,6 +1,4 @@
 "use server";
-// use server will mark all exported functions within as Server Actions, fn to run async code directly on the server (skip APIs).
-// server action fns will be called when forms are submitted
 
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
