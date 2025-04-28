@@ -18,7 +18,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useTransition } from "react";
 import { redirect } from "next/navigation";
-import { Loader2, PlusCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
   location: z
