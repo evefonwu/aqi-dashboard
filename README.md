@@ -21,7 +21,7 @@ app/
 - locations/
   page with locations listing and link to add
 - locations/create/
-  page with form to add new location
+  page with form to add new location nickname, stub location
 
 organization:
 
@@ -30,8 +30,9 @@ app/lib/
 - sql.md
   scratch pad for raw sql, eg create table via neon console
 - actions.ts
-  server actions that run sql to create, update, delete records from db
+  server actions that run sql to create, delete records from db
 - queries.ts
+  run sql to retrieve data to populate table
 
 components/locations
 
@@ -46,16 +47,3 @@ QA every step of the way:
 - Code review
 - Checking console.log, any errors, warnings
 - Running Lighthouse, how's the Accessibility score?
-
-user experience:
-
-from create-form page
-add a cancel button to redirect back to table listing
-
-this can be a dialog box?
-
-# edit
-
-don't edit. there's is only one field.
-
-just add and delete. it's going to be a select combo box to add new locations

@@ -10,6 +10,7 @@ const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 const FormSchema = z.object({
   id: z.string(),
+  nickname: z.string(),
   location: z.string(),
   date: z.string(),
 });
@@ -17,16 +18,18 @@ const CreateLocation = FormSchema.omit({ id: true, date: true });
 
 export async function createLocation(formData: FormData) {
   console.log(formData);
-  const { location } = CreateLocation.parse({
+  const { nickname, location } = CreateLocation.parse({
+    nickname: formData.get("nickname"),
     location: formData.get("location"),
   });
+
   const zipcode = "10001"; // stub
   const date = new Date().toISOString().split("T")[0];
 
   try {
     await sql`
-        INSERT INTO locations (location, zipcode, date)
-        VALUES (${location}, ${zipcode}, ${date})
+        INSERT INTO userLocations (nickname, location, zipcode, date)
+        VALUES (${nickname}, ${location}, ${zipcode}, ${date})
       `;
   } catch (error) {
     console.error(error);
@@ -37,6 +40,6 @@ export async function createLocation(formData: FormData) {
 }
 
 export async function deleteLocation(id: string) {
-  await sql`DELETE FROM locations WHERE id = ${id}`;
+  await sql`DELETE FROM userLocations WHERE id = ${id}`;
   revalidatePath("/locations");
 }

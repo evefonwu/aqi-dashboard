@@ -23,7 +23,8 @@ export function DeleteForm({ id }: { id: string }) {
         type="submit"
         aria-label="delete location"
         disabled={isPending}
-        variant="destructive"
+        variant="outline"
+        size="icon"
       >
         {isPending ? (
           <>

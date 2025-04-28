@@ -5,12 +5,12 @@ import { Location } from "./definitions";
 const sql = postgres(process.env.DATABASE_URL!, { ssl: "require" });
 
 export async function fetchLocations() {
-  console.log("Getting locations data from database...");
+  console.log("Getting user locations data from database...");
   try {
-    const data = await sql<Location[]>`SELECT * from locations`;
+    const data = await sql<Location[]>`SELECT * from userLocations`;
     return data;
   } catch (error) {
-    console.error("Database error:", error);
-    throw new Error("Failed to retrieve locations data");
+    console.error("database error:", error);
+    throw new Error("failed to retrieve user locations data");
   }
 }

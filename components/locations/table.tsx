@@ -32,7 +32,7 @@ export default async function LocationsTable() {
       <TableBody>
         {locations?.map((loc) => (
           <TableRow key={loc.id}>
-            <TableCell className="font-medium">Nickname</TableCell>
+            <TableCell className="font-medium">{loc.nickname}</TableCell>
             <TableCell>{loc.location}</TableCell>
             <TableCell>{loc.zipcode}</TableCell>
             <TableCell className="text-right">

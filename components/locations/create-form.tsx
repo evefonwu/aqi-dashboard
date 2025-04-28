@@ -21,24 +21,26 @@ import { redirect } from "next/navigation";
 import { Loader2 } from "lucide-react";
 
 const formSchema = z.object({
-  location: z
+  nickname: z
     .string({
-      message: "Location is required.",
+      message: "Name is required.",
     })
-    .min(5, {
-      message: "Please enter a valid location.",
+    .min(2, {
+      message: "Please enter a valid name.",
     }),
+  location: z.string(),
 });
 
 export default function CreateForm() {
   // loading state
   const [isPending, startTransition] = useTransition();
 
-  // define a form object with location
+  // define a form object to validate nickname user entry
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      location: "",
+      nickname: "",
+      location: "nyc, ny",
     },
     mode: "onBlur", // when field loses focus
     reValidateMode: "onChange", // when input changes after validation
@@ -58,6 +60,8 @@ export default function CreateForm() {
           if (!result.success) {
             return;
           }
+          // stub location value
+          formData.set("location", "nyc, ny");
           // wrap the async task
           startTransition(() => createLocation(formData));
         }}
@@ -66,22 +70,22 @@ export default function CreateForm() {
         <div className="flex flex-col gap-5">
           <FormField
             control={form.control}
-            name="location"
+            name="nickname"
             render={({ field }) => (
               <FormItem className="flex flex-col">
                 <FormLabel htmlFor={field.name} className="text-xl">
-                  Location
+                  Location name
                 </FormLabel>
                 <FormControl>
                   <Input
                     id={field.name}
-                    placeholder="Enter city, state or zip code"
+                    placeholder="Enter nickname"
                     {...field}
                     aria-describedby={`${field.name}-error`}
                   />
                 </FormControl>
                 <FormDescription id={`${field.name}-description`}>
-                  Add a new location (max 10)
+                  Enter a nickname for your location
                 </FormDescription>
                 <div id={`${field.name}-error`} aria-live="polite">
                   <FormMessage />
