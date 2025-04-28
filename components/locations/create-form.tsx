@@ -73,13 +73,11 @@ export default function CreateForm() {
             name="nickname"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel htmlFor={field.name} className="text-xl">
-                  Location name
-                </FormLabel>
+                <FormLabel htmlFor={field.name}>Nickname</FormLabel>
                 <FormControl>
                   <Input
                     id={field.name}
-                    placeholder="Enter nickname"
+                    placeholder=""
                     {...field}
                     aria-describedby={`${field.name}-error`}
                   />
@@ -93,6 +91,9 @@ export default function CreateForm() {
               </FormItem>
             )}
           />
+          <div>
+            <p>Location Search will go here</p>
+          </div>
           <div className="flex gap-2">
             <Button
               type="button"
