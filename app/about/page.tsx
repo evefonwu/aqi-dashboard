@@ -17,7 +17,7 @@ export default function Page() {
       </p>
       <p>
         Dowload the Environmental Protection Agency (EPA) AirNow mobile app,
-        enter your locations, turn on notification for forecasts.
+        enter your locations, and turn on notification for forecasts.
       </p>
     </div>
   );

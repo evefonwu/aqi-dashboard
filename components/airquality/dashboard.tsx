@@ -8,18 +8,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { fetchLocations } from "@/app/lib/queries";
-import { DeleteForm } from "./delete-form";
 
 // async await retrieving locations data...
-export default async function LocationsTable() {
+export default async function DashboardTable() {
   const locations = await fetchLocations();
 
   return (
     <Table>
       <TableCaption>
         {locations.length > 0
-          ? "A list of your added locations."
-          : "To add your locations, click the 'Add' button."}
+          ? "Air quality for your saved locations"
+          : "To add your locations, go to Locations tab."}
       </TableCaption>
       <TableHeader>
         <TableRow>
@@ -33,9 +32,7 @@ export default async function LocationsTable() {
           <TableRow key={loc.id}>
             <TableCell className="font-medium">{loc.nickname}</TableCell>
             <TableCell>{loc.location}</TableCell>
-            <TableCell className="text-right">
-              <DeleteForm id={loc.id} />
-            </TableCell>
+            <TableCell className="text-right"></TableCell>
           </TableRow>
         ))}
       </TableBody>
