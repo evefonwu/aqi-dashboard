@@ -32,7 +32,7 @@ export default function RootLayout({
           <header className="mx-auto">
             <Navbar />
           </header>
-          <main className="mx-auto">{children}</main>
+          <main className="mx-auto max-w-[400px]">{children}</main>
         </div>
       </body>
     </html>
