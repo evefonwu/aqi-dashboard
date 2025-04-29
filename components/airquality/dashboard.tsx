@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+
 import { fetchLocations } from "@/app/lib/queries";
 
 // async await retrieving locations data...
@@ -22,17 +23,17 @@ export default async function DashboardTable() {
       </TableCaption>
       <TableHeader>
         <TableRow>
+          <TableHead className="text-left">AQI Category</TableHead>
           <TableHead className="w-[100px]">Nickname</TableHead>
           <TableHead className="w-[280px]">Location</TableHead>
-          <TableHead className="text-right"></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {locations?.map((loc) => (
           <TableRow key={loc.id}>
+            <TableCell className="text-left"></TableCell>
             <TableCell className="font-medium">{loc.nickname}</TableCell>
             <TableCell>{loc.location}</TableCell>
-            <TableCell className="text-right"></TableCell>
           </TableRow>
         ))}
       </TableBody>

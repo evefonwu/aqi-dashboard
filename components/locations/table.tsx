@@ -25,7 +25,7 @@ export default async function LocationsTable() {
         <TableRow>
           <TableHead className="w-[100px]">Nickname</TableHead>
           <TableHead className="w-[280px]">Location</TableHead>
-          <TableHead className="text-right"></TableHead>
+          <TableHead className="text-right">Delete</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
