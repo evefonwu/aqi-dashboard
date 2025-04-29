@@ -8,7 +8,7 @@ import {
 import CreateForm from "@/components/locations/create-form";
 export default function Page() {
   return (
-    <main className="grid p-10 w-[500px]">
+    <main className="grid min-w-[380px]">
       <Card>
         <CardHeader>
           <CardTitle>Choose Your Location</CardTitle>

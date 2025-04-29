@@ -24,8 +24,7 @@ export default async function LocationsTable() {
       <TableHeader>
         <TableRow>
           <TableHead className="w-[100px]">Nickname</TableHead>
-          <TableHead>Location</TableHead>
-          <TableHead>Zip Code</TableHead>
+          <TableHead className="w-[280px]">Location</TableHead>
           <TableHead className="text-right">Delete</TableHead>
         </TableRow>
       </TableHeader>
@@ -34,7 +33,6 @@ export default async function LocationsTable() {
           <TableRow key={loc.id}>
             <TableCell className="font-medium">{loc.nickname}</TableCell>
             <TableCell>{loc.location}</TableCell>
-            <TableCell>{loc.zipcode}</TableCell>
             <TableCell className="text-right">
               <DeleteForm id={loc.id} />
             </TableCell>

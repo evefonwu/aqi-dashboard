@@ -2,11 +2,15 @@
 
 Notes/Log -
 
+# working on site navigation
+
+nav: about page, air quality page, locations page
+
+# worked on locations page and add new location
+
 pnpm add postgres
 
 https://www.npmjs.com/package/postgres
-
-# worked on locations page and add new location
 
 key routes implemented:
 

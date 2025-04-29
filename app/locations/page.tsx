@@ -4,9 +4,10 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PlusCircle } from "lucide-react";
+
 export default function Page() {
   return (
-    <main className="grid p-10 gap-3 w-[500px]">
+    <main className="grid gap-3">
       <h1 className="text-xl">Your locations</h1>
       <section className="grid gap-3">
         <Suspense fallback={<LocationsTableSkeleton />}>
