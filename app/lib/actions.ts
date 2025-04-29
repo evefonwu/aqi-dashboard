@@ -10,24 +10,26 @@ const FormSchema = z.object({
   id: z.string(),
   nickname: z.string(),
   location: z.string(),
+  zip: z.string(),
   date: z.string(),
 });
 const CreateLocation = FormSchema.omit({ id: true, date: true });
 
 export async function createLocation(formData: FormData) {
   console.log(formData);
-  const { nickname, location } = CreateLocation.parse({
+
+  const { nickname, location, zip } = CreateLocation.parse({
     nickname: formData.get("nickname"),
     location: formData.get("location"),
+    zip: formData.get("zip"),
   });
 
-  const zipcode = "10001"; // stub
   const date = new Date().toISOString().split("T")[0];
 
   try {
     await sql`
         INSERT INTO userLocations (nickname, location, zipcode, date)
-        VALUES (${nickname}, ${location}, ${zipcode}, ${date})
+        VALUES (${nickname}, ${location}, ${zip}, ${date})
       `;
   } catch (error) {
     console.error(error);

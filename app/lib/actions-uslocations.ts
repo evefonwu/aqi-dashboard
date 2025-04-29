@@ -2,21 +2,7 @@
 
 import postgres from "postgres";
 const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
-
-export type Location = {
-  id: number;
-  zip: string;
-  city: string;
-  state: string;
-};
-
-export type LocationSearchResult = {
-  id: number;
-  zip: string;
-  city: string;
-  state: string;
-  label: string; // Formatted display for the autocomplete
-};
+import { Location, LocationSearchResult } from "./definitions";
 
 /**
  * Search for locations based on user input
@@ -30,7 +16,6 @@ export async function searchLocations(
   if (!query || query.length < 2) {
     return [];
   }
-
   try {
     // Clean the input query
     const sanitizedQuery = query.trim();

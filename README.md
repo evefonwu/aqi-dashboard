@@ -15,7 +15,7 @@ app/
 - locations/
   page with locations listing and link to add
 - locations/create/
-  page with form to add new location nickname, stub location
+  page with form to add new location with nickname
 - locations/search/
   page to work on autocomplete location search component
 
@@ -31,15 +31,19 @@ app/lib/
   run sql to retrieve data to populate table
 - actions-uslocations.ts
   server action to run sql to search locations from db for autocomplete
+- definitions.ts
+  type definitions
 
 components/locations
 
 - create-form.tsx (react client component, form/event handling)
   shadcn for styled accessible components,
   react-hook-forms for validations,
+  integrated autocomplete location search for form validations,
   form action to invoke server actions
 - table.tsx listing user locations
-- autocomplete locations search component
+- autocomplete.tsx
+  autocomplete suggests as user types city, state or zipcode
 
 scripts/
 

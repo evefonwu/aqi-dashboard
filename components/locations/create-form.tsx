@@ -12,57 +12,79 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { createLocation } from "@/app/lib/actions";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useTransition } from "react";
 import { redirect } from "next/navigation";
 import { Loader2 } from "lucide-react";
+import { LocationAutocomplete } from "@/components/locations/autocomplete";
+import { LocationSearchResult } from "@/app/lib/definitions";
 
 const formSchema = z.object({
-  nickname: z
-    .string({
-      message: "Name is required.",
+  nickname: z.string().min(2, {
+    message: "Please enter a valid name.",
+  }),
+  location: z.string().min(1, {
+    message: "Please select a valid location.",
+  }),
+  // store user selected location value
+  locationData: z
+    .object({
+      label: z.string(),
+      zip: z.string(),
     })
-    .min(2, {
-      message: "Please enter a valid name.",
-    }),
-  location: z.string(),
+    .optional(),
 });
 
 export default function CreateForm() {
-  // loading state
   const [isPending, startTransition] = useTransition();
 
-  // define a form object to validate nickname user entry
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       nickname: "",
-      location: "nyc, ny",
+      location: "",
+      locationData: undefined,
     },
-    mode: "onBlur", // when field loses focus
-    reValidateMode: "onChange", // when input changes after validation
+    mode: "onBlur",
+    reValidateMode: "onChange",
   });
+
+  const handleLocationSelect = (locationData: LocationSearchResult | null) => {
+    // only if there's a valid selection in a location data object
+    if (locationData) {
+      // location.label is the full city, state zip display name
+      form.setValue("location", locationData.label, {
+        shouldValidate: true,
+      });
+
+      form.setValue("locationData", {
+        label: locationData.label,
+        zip: locationData.zip,
+      });
+    } else {
+      // reset when selection is cleared
+      form.setValue("location", "", { shouldValidate: true });
+      form.setValue("locationData", undefined);
+    }
+  };
 
   return (
     <Form {...form}>
       <form
         action={async (formData) => {
-          // before sending form to server action
+          // validate entire form before submission
           const isValid = await form.trigger();
           if (!isValid) {
             return;
           }
+          // add label and zip to formData before sending it to server action fn
           const validatedFields = form.getValues();
-          const result = formSchema.safeParse(validatedFields);
-          if (!result.success) {
-            return;
+          if (validatedFields.locationData) {
+            formData.set("location", validatedFields.locationData.label);
+            formData.set("zip", validatedFields.locationData.zip);
           }
-          // stub location value
-          formData.set("location", "nyc, ny");
-          // wrap the async task
           startTransition(() => createLocation(formData));
         }}
         noValidate
@@ -91,9 +113,28 @@ export default function CreateForm() {
               </FormItem>
             )}
           />
-          <div>
-            <p>Location Search will go here</p>
-          </div>
+          <FormField
+            control={form.control}
+            name="location"
+            render={({ field }) => (
+              <FormItem className="flex flex-col">
+                <FormLabel htmlFor="location-autocomplete">Location</FormLabel>
+                <FormControl>
+                  <LocationAutocomplete
+                    onLocationSelect={handleLocationSelect}
+                    className="w-full"
+                    placeholder={field.value || "Enter city, state or ZIP code"}
+                  />
+                </FormControl>
+                <FormDescription id="location-description">
+                  Search and select your location
+                </FormDescription>
+                <div id="location-error" aria-live="polite">
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
           <div className="flex gap-2">
             <Button
               type="button"

@@ -11,10 +11,8 @@ import {
   CommandItem,
 } from "@/components/ui/command";
 import { useDebounce } from "@/components/hooks/useDebounce";
-import {
-  LocationSearchResult,
-  searchLocations,
-} from "@/app/lib/actions-uslocations";
+import { searchLocations } from "@/app/lib/actions-uslocations";
+import { LocationSearchResult } from "@/app/lib/definitions";
 import { Skeleton } from "@/components/ui/skeleton";
 
 interface LocationAutocompleteProps {
@@ -29,9 +27,7 @@ export function LocationAutocomplete({
   className,
 }: LocationAutocompleteProps) {
   const [query, setQuery] = useState<string>("");
-
   const [loading, setLoading] = useState(false);
-
   const [locations, setLocations] = useState<LocationSearchResult[]>([]);
 
   const [selectedLocation, setSelectedLocation] =

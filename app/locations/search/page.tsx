@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { LocationAutocomplete } from "@/components/locations/autocomplete";
-import { LocationSearchResult } from "@/app/lib/actions-uslocations";
+import { LocationSearchResult } from "@/app/lib/definitions";
 
 export default function Page() {
   const [selectedLocation, setSelectedLocation] =
