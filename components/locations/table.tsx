@@ -42,7 +42,9 @@ export default async function LocationsTable() {
             </TableCell>
             <TableCell>
               <div className="max-w-[200px]">
-                <p className="truncate">{loc.location}</p>
+                <p className="truncate">
+                  {loc.location} {loc.zipcode}
+                </p>
               </div>
             </TableCell>
             <TableCell className="text-right">

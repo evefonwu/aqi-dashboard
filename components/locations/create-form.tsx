@@ -30,9 +30,9 @@ const formSchema = z.object({
     message: "Please select a valid location.",
   }),
   // store user selected location value
-  locationData: z
+  dataToStore: z
     .object({
-      label: z.string(),
+      formatted: z.string(), // formatted for dashboard table
       zip: z.string(),
     })
     .optional(),
@@ -46,28 +46,31 @@ export default function CreateForm() {
     defaultValues: {
       nickname: "",
       location: "",
-      locationData: undefined,
+      dataToStore: undefined,
     },
     mode: "onBlur",
     reValidateMode: "onChange",
   });
 
-  const handleLocationSelect = (locationData: LocationSearchResult | null) => {
+  // handle location selected from autocomplete component
+  const handleLocationSelect = (
+    selectedLocation: LocationSearchResult | null
+  ) => {
     // only if there's a valid selection in a location data object
-    if (locationData) {
+    if (selectedLocation) {
       // location.label is the full city, state zip display name
-      form.setValue("location", locationData.label, {
+      form.setValue("location", selectedLocation.label, {
         shouldValidate: true,
       });
 
-      form.setValue("locationData", {
-        label: locationData.label,
-        zip: locationData.zip,
+      form.setValue("dataToStore", {
+        formatted: selectedLocation.city + ", " + selectedLocation.state,
+        zip: selectedLocation.zip,
       });
     } else {
       // reset when selection is cleared
       form.setValue("location", "", { shouldValidate: true });
-      form.setValue("locationData", undefined);
+      form.setValue("dataToStore", undefined);
     }
   };
 
@@ -80,11 +83,11 @@ export default function CreateForm() {
           if (!isValid) {
             return;
           }
-          // add label and zip to formData before sending it to server action fn
+          // add formatted and zip to formData before sending it to server action fn/db
           const validatedFields = form.getValues();
-          if (validatedFields.locationData) {
-            formData.set("location", validatedFields.locationData.label);
-            formData.set("zip", validatedFields.locationData.zip);
+          if (validatedFields.dataToStore) {
+            formData.set("location", validatedFields.dataToStore.formatted);
+            formData.set("zip", validatedFields.dataToStore.zip);
           }
           startTransition(() => createLocation(formData));
         }}
@@ -119,7 +122,7 @@ export default function CreateForm() {
             name="location"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel htmlFor="location-autocomplete">Location</FormLabel>
+                <FormLabel htmlFor={field.name}>Location</FormLabel>
                 <FormControl>
                   <LocationAutocomplete
                     onLocationSelect={handleLocationSelect}

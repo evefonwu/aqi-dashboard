@@ -1,3 +1,9 @@
+# Project In Progress ~
+
+Notes/Log -
+
+# styling ui, make consistent, truncate text
+
 styling ui, review everything, make consistent:
 
 - put every section in a card wrapper
@@ -18,10 +24,6 @@ icons:
 
 - link has arrow -> icon
 - action buttons have +/- icons
-
-# Project In Progress ~
-
-Notes/Log -
 
 # working on site navigation
 

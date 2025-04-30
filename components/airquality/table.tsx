@@ -10,11 +10,12 @@ import {
 
 import { fetchLocations } from "@/app/lib/queries";
 
-function truncateString(text: string, maxLen = 8) {
-  if (text.length <= maxLen) {
-    return text;
-  }
-  return text.slice(0, maxLen) + "...";
+function truncateName(text: string, maxLen = 8) {
+  return text.length > maxLen ? text.slice(0, maxLen) + "..." : text;
+}
+
+function truncateLocation(text: string, maxLen = 23) {
+  return text.length > maxLen ? text.slice(0, maxLen) + "..." : text;
 }
 
 // async await retrieving locations data...
@@ -40,7 +41,7 @@ export default async function DashboardTable() {
           <TableRow key={loc.id}>
             <TableCell className="text-left">---</TableCell>
             <TableCell className="flex">
-              {truncateString(loc.nickname)} @ {loc.location}
+              {truncateName(loc.nickname)} in {truncateLocation(loc.location)}
             </TableCell>
           </TableRow>
         ))}
