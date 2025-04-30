@@ -14,7 +14,7 @@ export default function NavBar() {
         href="/about"
         aria-label="Link to About page"
         className={cn(
-          "flex h-[35px] w-[130px] grow items-center justify-center gap-3 rounded-l-md bg-gray-100 p-3 text-sm font-medium",
+          "flex h-[35px] grow items-center justify-center gap-3 rounded-l-md bg-gray-100 p-3 text-sm font-medium",
           {
             "bg-teal-700 text-white": pathname === "/about",
           }
@@ -27,7 +27,7 @@ export default function NavBar() {
         href="/"
         aria-label="Link to Air Quality page"
         className={cn(
-          "flex h-[35px] w-[130px] grow items-center justify-center gap-3 bg-gray-100 p-3 text-sm font-medium hover:bgtealsky-100 hover:teal-blue-600",
+          "flex h-[35px] grow items-center justify-center gap-3 bg-gray-100 p-3 text-sm font-medium hover:bgtealsky-100 hover:teal-blue-600",
           {
             "bg-teal-700 text-white": pathname === "/",
           }
@@ -40,7 +40,7 @@ export default function NavBar() {
         href="/locations"
         aria-label="Link to Locations page"
         className={cn(
-          "flex h-[35px] w-[130px] grow items-center justify-center gap-3 rounded-r-md bg-gray-100 p-3 text-sm font-medium",
+          "flex h-[35px] grow items-center justify-center gap-3 rounded-r-md bg-gray-100 p-3 text-sm font-medium",
           {
             "bg-teal-700 text-white": pathname === "/locations",
           }

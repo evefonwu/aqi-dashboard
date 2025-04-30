@@ -10,12 +10,14 @@ import {
 import { fetchLocations } from "@/app/lib/queries";
 import { DeleteForm } from "./delete-form";
 
+// async fetch location data and display it in a responsive table
+
 // async await retrieving locations data...
 export default async function LocationsTable() {
   const locations = await fetchLocations();
 
   return (
-    <Table>
+    <Table className="py-5">
       <TableCaption>
         {locations.length > 0
           ? "A list of your added locations."
@@ -23,16 +25,26 @@ export default async function LocationsTable() {
       </TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="w-[100px]">Nickname</TableHead>
-          <TableHead className="w-[280px]">Location</TableHead>
+          <TableHead>Nickname</TableHead>
+          <TableHead>Location</TableHead>
           <TableHead className="text-right">Delete</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {locations?.map((loc) => (
           <TableRow key={loc.id}>
-            <TableCell className="font-medium">{loc.nickname}</TableCell>
-            <TableCell>{loc.location}</TableCell>
+            <TableCell className="font-medium">
+              <div className="max-w-[130px]">
+                <p className="truncate" title={loc.nickname}>
+                  {loc.nickname}
+                </p>
+              </div>
+            </TableCell>
+            <TableCell>
+              <div className="max-w-[200px]">
+                <p className="truncate">{loc.location}</p>
+              </div>
+            </TableCell>
             <TableCell className="text-right">
               <DeleteForm id={loc.id} />
             </TableCell>

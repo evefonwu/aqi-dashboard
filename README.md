@@ -1,3 +1,24 @@
+styling ui, review everything, make consistent:
+
+- put every section in a card wrapper
+- be specific, add description
+- add aria-label
+- check layout, responsive at key breakpoints?
+
+layouts:
+
+- root layout: horizontally center items within, py: 10,
+- navbar: fixed width 350px
+- responsive page card width: w-[350px] md:w-[500px]
+- corresponding fallback ui skeletons within card width limits
+- data table fields: nickname w-[130px] location w-[200px]
+- fix width data table fields, text truncate overflowing text
+
+icons:
+
+- link has arrow -> icon
+- action buttons have +/- icons
+
 # Project In Progress ~
 
 Notes/Log -

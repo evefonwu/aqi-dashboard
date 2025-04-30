@@ -28,11 +28,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <div className="flex flex-col py-10 gap-10">
-          <header className="mx-auto">
-            <Navbar />
+        <div className="flex flex-col py-10 min-h-screen gap-8 overflow-x-hidden">
+          <header className="flex justify-center">
+            <div className="w-[350px]">
+              <Navbar />
+            </div>
           </header>
-          <main className="mx-auto max-w-[400px]">{children}</main>
+          <main className="flex justify-center">
+            <div className="w-[350px] md:w-[500px]">{children}</div>
+          </main>
         </div>
       </body>
     </html>

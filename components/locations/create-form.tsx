@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -139,6 +140,7 @@ export default function CreateForm() {
             <Button
               type="button"
               variant="outline"
+              aria-label="Cancel and return to locations list"
               onClick={() => {
                 form.reset();
                 form.clearErrors();
@@ -149,7 +151,7 @@ export default function CreateForm() {
             </Button>
             <Button
               variant="default"
-              aria-label="Add new location"
+              aria-label="Add a new location"
               type="submit"
               disabled={isPending}
             >
@@ -160,7 +162,7 @@ export default function CreateForm() {
                 </>
               ) : (
                 <>
-                  <span>Submit</span>
+                  Add <PlusCircle className="mr-2 h-4 w-4" />
                 </>
               )}
             </Button>

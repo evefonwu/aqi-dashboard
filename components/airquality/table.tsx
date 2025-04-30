@@ -10,6 +10,13 @@ import {
 
 import { fetchLocations } from "@/app/lib/queries";
 
+function truncateString(text: string, maxLen = 8) {
+  if (text.length <= maxLen) {
+    return text;
+  }
+  return text.slice(0, maxLen) + "...";
+}
+
 // async await retrieving locations data...
 export default async function DashboardTable() {
   const locations = await fetchLocations();
@@ -23,17 +30,18 @@ export default async function DashboardTable() {
       </TableCaption>
       <TableHeader>
         <TableRow>
-          <TableHead className="text-left">AQI Category</TableHead>
-          <TableHead className="w-[100px]">Nickname</TableHead>
-          <TableHead className="w-[280px]">Location</TableHead>
+          <TableHead className="text-left">AQI</TableHead>
+          <TableHead className=""></TableHead>
+          <TableHead className=""></TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {locations?.map((loc) => (
           <TableRow key={loc.id}>
-            <TableCell className="text-left"></TableCell>
-            <TableCell className="font-medium">{loc.nickname}</TableCell>
-            <TableCell>{loc.location}</TableCell>
+            <TableCell className="text-left">---</TableCell>
+            <TableCell className="flex">
+              {truncateString(loc.nickname)} @ {loc.location}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
