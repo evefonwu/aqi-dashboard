@@ -153,7 +153,11 @@ function AirQualityDisplay() {
         <div className="flex items-center gap-2">
           <span>Error: {error.message}</span>
         </div>
-        <Button variant="outline" onClick={refreshData}>
+        <Button
+          variant="outline"
+          onClick={refreshData}
+          aria-label="Try again to load air quality dashboard data"
+        >
           Try Again
         </Button>
       </div>
@@ -264,6 +268,7 @@ function AirQualityDisplay() {
         <Button
           onClick={refreshData}
           disabled={isValidating}
+          aria-label="Refresh air quality dashboard data"
           className="flex items-center"
         >
           {isValidating ? (
