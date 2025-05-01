@@ -11,12 +11,12 @@ export default function NavBar() {
     <nav className="flex">
       <Link
         key={1}
-        href="/about"
+        href="/"
         aria-label="Link to About page"
         className={cn(
           "flex h-[35px] grow items-center justify-center gap-3 rounded-l-md bg-gray-100 p-3 text-sm font-medium",
           {
-            "bg-teal-700 text-white": pathname === "/about",
+            "bg-teal-700 text-white": pathname === "/",
           }
         )}
       >
@@ -24,12 +24,12 @@ export default function NavBar() {
       </Link>
       <Link
         key={2}
-        href="/"
-        aria-label="Link to Air Quality page"
+        href="/dashboard"
+        aria-label="Link to Air Quality Dashboard page"
         className={cn(
           "flex h-[35px] grow items-center justify-center gap-3 bg-gray-100 p-3 text-sm font-medium hover:bgtealsky-100 hover:teal-blue-600",
           {
-            "bg-teal-700 text-white": pathname === "/",
+            "bg-teal-700 text-white": pathname === "/dashboard",
           }
         )}
       >
