@@ -7,8 +7,7 @@ import {
 } from "@/components/ui/card";
 
 import Dashboard from "@/components/airquality/dashboard";
-import { DashboardSkeleton } from "@/components/skeletons";
-import { Suspense } from "react";
+// import { Suspense } from "react";
 
 export default function Home() {
   // your air quality dashboard will go here
@@ -19,9 +18,9 @@ export default function Home() {
         <CardDescription>Your air quality dashboard</CardDescription>
       </CardHeader>
       <CardContent>
-        <Suspense fallback={<DashboardSkeleton />}>
-          <Dashboard />
-        </Suspense>
+        {/* <Suspense fallback={<DashboardSkeleton />}> */}
+        <Dashboard />
+        {/* </Suspense> */}
       </CardContent>
     </Card>
   );

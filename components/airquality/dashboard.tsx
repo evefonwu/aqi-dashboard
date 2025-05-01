@@ -2,15 +2,9 @@
 
 import { SWRConfig } from "swr";
 import useSWR from "swr";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import { DashboardSkeleton } from "@/components/skeletons";
+import { RefreshCw } from "lucide-react";
 import {
   Table,
   TableBody,
@@ -20,7 +14,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { RefreshCw, XCircle } from "lucide-react";
 
 // Define types
 interface AirQualityReading {
@@ -29,8 +22,6 @@ interface AirQualityReading {
   LocalTimeZone: string;
   ReportingArea: string;
   StateCode: string;
-  Latitude: number;
-  Longitude: number;
   ParameterName: string;
   AQI: number;
   Category: {
@@ -122,9 +113,7 @@ function getAQILevel(aqi: number): number {
   return 6;
 }
 
-// Component for Air Quality data display
 function AirQualityDisplay() {
-  // Use SWR hook to fetch data
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     LocationAirQualityData[]
   >("/api/air-quality", fetcher, {
@@ -141,51 +130,32 @@ function AirQualityDisplay() {
 
   // Loading state
   if (isLoading) {
+    return <DashboardSkeleton />;
+  }
+
+  // Check for no saved locations before error state
+  if (!data || data.length === 0) {
     return (
-      <div className="flex justify-center my-8">
-        <div className="space-y-4 w-full max-w-6xl">
-          <Skeleton className="h-8 w-64" />
-          <Skeleton className="h-4 w-32" />
-          <Skeleton className="h-64 w-full" />
-        </div>
-      </div>
+      <>
+        <p>
+          You have no saved locations. Go to the Locations page to add your
+          locations.
+        </p>
+      </>
     );
   }
 
   // Error state
   if (error) {
     return (
-      <Card className="mb-4 max-w-6xl mx-auto border-red-200 bg-red-50">
-        <CardContent className="pt-6">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <XCircle className="h-5 w-5 text-red-500" />
-              <span className="text-red-700">Error: {error.message}</span>
-            </div>
-            <Button
-              variant="outline"
-              onClick={refreshData}
-              size="sm"
-              className="border-red-200 text-red-700 hover:bg-red-100 hover:text-red-800"
-            >
-              Try Again
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // No data state
-  if (!data || data.length === 0) {
-    return (
-      <Card className="max-w-6xl mx-auto">
-        <CardContent className="pt-6 text-center">
-          <p className="text-muted-foreground">
-            No saved locations found. Add locations to see air quality data.
-          </p>
-        </CardContent>
-      </Card>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <span>Error: {error.message}</span>
+        </div>
+        <Button variant="outline" onClick={refreshData}>
+          Try Again
+        </Button>
+      </div>
     );
   }
 
@@ -205,7 +175,8 @@ function AirQualityDisplay() {
         return null;
       }
 
-      // Get the highest AQI reading
+      // Get the highest AQI reading of multiple categories,
+      // eg. Ozone, PM2.5
       const highestReading = getHighestAQIReading(
         loc.airQualityData as AirQualityReading[]
       );
@@ -225,10 +196,9 @@ function AirQualityDisplay() {
   return (
     <div className="grid gap-8">
       <Table>
-        <TableCaption>
-          Showing highest AQI readings for each location. Air quality data
-          automatically refreshes every 3 hours.
-        </TableCaption>
+        {/* <TableCaption>
+          Showing highest AQI reading of multiple categories (eg Ozone, PM2.5)
+        </TableCaption> */}
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px] text-center">AQI</TableHead>
@@ -254,7 +224,7 @@ function AirQualityDisplay() {
                 <TableRow key={`${item!.location}-${index}`}>
                   <TableCell className="text-center">
                     <div
-                      className={`h-3 w-3 sm:h-6 sm:w-6 rounded-full mx-auto ${getColor(
+                      className={`h-6 w-6 rounded-full mx-auto ${getColor(
                         aqiLevel
                       )}`}
                     ></div>
@@ -269,9 +239,9 @@ function AirQualityDisplay() {
                   <TableCell>
                     <div className="flex flex-col gap-1">
                       <div className="font-medium">
-                        {item!.location} ({reading.ParameterName})
+                        {item!.location}
+                        {/* ({reading.ParameterName}) */}
                       </div>
-
                       <div className="text-xs text-muted-foreground">
                         {formatHour(
                           reading.HourObserved,
@@ -316,7 +286,6 @@ function AirQualityDisplay() {
   );
 }
 
-// SWR Provider wrapper component
 export default function Dashboard() {
   return (
     <SWRConfig

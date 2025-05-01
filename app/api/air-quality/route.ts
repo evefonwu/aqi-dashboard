@@ -1,5 +1,3 @@
-// app/api/air-quality/route.ts
-
 import { NextResponse } from "next/server";
 import { fetchLocations } from "@/app/lib/queries";
 import { UserSavedLocation } from "@/app/lib/definitions";
