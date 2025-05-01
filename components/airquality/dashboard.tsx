@@ -8,7 +8,7 @@ import { RefreshCw } from "lucide-react";
 import {
   Table,
   TableBody,
-  TableCaption,
+  //TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -32,6 +32,7 @@ interface AirQualityReading {
 
 interface LocationAirQualityData {
   id: number;
+  nickname: string;
   location: string;
   zipcode: string;
   airQualityData: AirQualityReading[] | { error: string };
@@ -185,6 +186,7 @@ function AirQualityDisplay() {
       }
 
       return {
+        nickname: loc.nickname,
         location: loc.location,
         zipcode: loc.zipcode,
         reading: highestReading,
@@ -239,7 +241,7 @@ function AirQualityDisplay() {
                   <TableCell>
                     <div className="flex flex-col gap-1">
                       <div className="font-medium">
-                        {item!.location}
+                        {item!.nickname} in {item!.location}
                         {/* ({reading.ParameterName}) */}
                       </div>
                       <div className="text-xs text-muted-foreground">
