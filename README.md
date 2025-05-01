@@ -1,3 +1,14 @@
+creating an API endpoint to fetch data from AirNow API:
+
+- storing API environment variables server-side
+- retrieving user saved locations from database
+- api route will fetch air quality data for all saved locations with a Promise.all for a combined result
+
+client-side data fetching with useSWR for caching, automatic refreshes and retries:
+
+- configured to automatically refreshes every 3 hours,
+  revalidate when window regains focus, and revalidate on browser re-connection
+
 # Project In Progress ~
 
 Notes/Log -

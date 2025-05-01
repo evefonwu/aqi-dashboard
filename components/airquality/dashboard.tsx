@@ -223,8 +223,72 @@ function AirQualityDisplay() {
 
   // Data loaded state - table format
   return (
-    <div className="p-4 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-6">
+    <div className="grid gap-8">
+      <Table>
+        <TableCaption>
+          Showing highest AQI readings for each location. Air quality data
+          automatically refreshes every 3 hours.
+        </TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[50px] text-center">AQI</TableHead>
+            <TableHead className="w-[80px] text-center"></TableHead>
+            <TableHead className="text-center"></TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {tableData.length === 0 ? (
+            <TableRow>
+              <TableCell
+                colSpan={3}
+                className="text-center py-6 text-muted-foreground"
+              >
+                No valid air quality data available
+              </TableCell>
+            </TableRow>
+          ) : (
+            tableData.map((item, index) => {
+              const reading = item!.reading;
+              const aqiLevel = getAQILevel(reading.AQI);
+              return (
+                <TableRow key={`${item!.location}-${index}`}>
+                  <TableCell className="text-center">
+                    <div
+                      className={`h-3 w-3 sm:h-6 sm:w-6 rounded-full mx-auto ${getColor(
+                        aqiLevel
+                      )}`}
+                    ></div>
+                  </TableCell>
+                  <TableCell className="text-center font-medium text-lg">
+                    {reading.AQI}
+                    <div className="mt-1 text-xs text-muted-foreground">
+                      {levels.find((level) => level.level === aqiLevel)
+                        ?.category || reading.Category.Name}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex flex-col gap-1">
+                      <div className="font-medium">
+                        {item!.location} ({reading.ParameterName})
+                      </div>
+
+                      <div className="text-xs text-muted-foreground">
+                        {formatHour(
+                          reading.HourObserved,
+                          reading.LocalTimeZone
+                        )}{" "}
+                        {reading.DateObserved}
+                      </div>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })
+          )}
+        </TableBody>
+      </Table>
+
+      <div className="">
         <Button
           onClick={refreshData}
           disabled={isValidating}
@@ -232,13 +296,11 @@ function AirQualityDisplay() {
         >
           {isValidating ? (
             <>
-              <RefreshCw className="mr-2 h-4 w-4 animate-spin" />
-              <span>Refreshing...</span>
+              <RefreshCw className="h-4 w-4 animate-spin" />
             </>
           ) : (
             <>
-              <RefreshCw className="mr-2 h-4 w-4" />
-              <span>Refresh Data</span>
+              <RefreshCw className="h-4 w-4" />
             </>
           )}
         </Button>
@@ -250,119 +312,12 @@ function AirQualityDisplay() {
           <span>Updating data in background...</span>
         </div>
       )}
-
-      <Card>
-        <CardContent className="p-0">
-          <Table>
-            <TableCaption>
-              Showing highest AQI readings for each location. Air quality data
-              automatically refreshes every 3 hours.
-            </TableCaption>
-            <TableHeader>
-              <TableRow>
-                <TableHead className="w-[70px]">Status</TableHead>
-                <TableHead className="w-[80px] text-center">AQI</TableHead>
-                <TableHead>Location Information</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {tableData.length === 0 ? (
-                <TableRow>
-                  <TableCell
-                    colSpan={3}
-                    className="text-center py-6 text-muted-foreground"
-                  >
-                    No valid air quality data available
-                  </TableCell>
-                </TableRow>
-              ) : (
-                tableData.map((item, index) => {
-                  const reading = item!.reading;
-                  const aqiLevel = getAQILevel(reading.AQI);
-                  return (
-                    <TableRow key={`${item!.location}-${index}`}>
-                      <TableCell className="text-center">
-                        <div
-                          className={`h-3 w-3 sm:h-6 sm:w-6 rounded-full mx-auto ${getColor(
-                            aqiLevel
-                          )}`}
-                        ></div>
-                      </TableCell>
-                      <TableCell className="text-center font-medium text-lg">
-                        {reading.AQI}
-                        <div className="mt-1 text-xs text-muted-foreground">
-                          {levels.find((level) => level.level === aqiLevel)
-                            ?.category || reading.Category.Name}
-                        </div>
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex flex-col gap-1">
-                          <div className="font-medium">
-                            {item!.location} ({reading.ParameterName})
-                          </div>
-                          <div className="text-sm text-muted-foreground">
-                            {reading.ReportingArea}, {reading.StateCode} · Zip:{" "}
-                            {item!.zipcode}
-                          </div>
-                          <div className="text-xs text-muted-foreground">
-                            Observed: {reading.DateObserved} at{" "}
-                            {formatHour(
-                              reading.HourObserved,
-                              reading.LocalTimeZone
-                            )}
-                          </div>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  );
-                })
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      {/* Display locations with errors separately */}
-      {data.some((loc) => "error" in loc.airQualityData) && (
-        <div className="mt-6">
-          <h2 className="text-lg font-medium mb-3">Locations with Errors</h2>
-          <Card>
-            <CardContent className="p-0">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Location</TableHead>
-                    <TableHead>Error</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {data
-                    .filter((loc) => "error" in loc.airQualityData)
-                    .map((loc) => (
-                      <TableRow key={loc.id}>
-                        <TableCell className="font-medium">
-                          {loc.location}{" "}
-                          <span className="text-xs text-muted-foreground">
-                            (Zip: {loc.zipcode})
-                          </span>
-                        </TableCell>
-                        <TableCell className="text-red-600">
-                          {(loc.airQualityData as { error: string }).error}
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </CardContent>
-          </Card>
-        </div>
-      )}
     </div>
   );
 }
 
 // SWR Provider wrapper component
-export default function AirQualityPage() {
+export default function Dashboard() {
   return (
     <SWRConfig
       value={{

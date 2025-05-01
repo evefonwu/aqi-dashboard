@@ -6,7 +6,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-import Dashboard from "@/components/airquality/table";
+import Dashboard from "@/components/airquality/dashboard";
 import { DashboardSkeleton } from "@/components/skeletons";
 import { Suspense } from "react";
 
