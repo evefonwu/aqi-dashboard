@@ -1,8 +1,12 @@
+# Air Quality Dashboard In Progress ~
+
+Notes/Log -
+
+# checking UI states
+
 code review, create utils for helper functions
 
-hover over refresh button, show tooltip
-
-check accessibility aria-label
+check accessibility aria-label, add name for refresh
 
 check dashboard states and UI:
 
@@ -10,10 +14,6 @@ check dashboard states and UI:
 - error in getting air quality data
 - loading data
 - displayed data
-
-# Project In Progress ~
-
-Notes/Log -
 
 # populating air quality data for dashboard
 

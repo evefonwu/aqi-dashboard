@@ -82,9 +82,8 @@ function AirQualityDisplay() {
   // Check for no saved locations before error state
   if (!data || data.length === 0) {
     return (
-      <p>
-        You have no saved locations. Go to the Locations page to add your
-        locations.
+      <p className="text-center py-6 text-muted-foreground">
+        To add your locations, go to the Locations page.
       </p>
     );
   }
@@ -207,31 +206,31 @@ function AirQualityDisplay() {
         </TableBody>
       </Table>
 
-      <div className="">
+      <div>
         <Button
           onClick={refreshData}
+          variant="outline"
           disabled={isValidating}
           aria-label="Refresh air quality dashboard data"
           className="flex items-center"
         >
           {isValidating ? (
             <>
-              <RefreshCw className="h-4 w-4 animate-spin" />
+              Refresh Data <RefreshCw className="h-4 w-4 animate-spin" />
             </>
           ) : (
             <>
-              <RefreshCw className="h-4 w-4" />
+              Refresh Data <RefreshCw className="h-4 w-4" />
             </>
           )}
         </Button>
+        {isValidating && !isLoading && (
+          <div className="mb-2 text-sm text-muted-foreground flex items-center">
+            <RefreshCw className="mr-2 h-3 w-3 animate-spin" />
+            <span>Refreshing data...</span>
+          </div>
+        )}
       </div>
-
-      {isValidating && !isLoading && (
-        <div className="mb-2 text-sm text-muted-foreground flex items-center">
-          <RefreshCw className="mr-2 h-3 w-3 animate-spin" />
-          <span>Updating data in background...</span>
-        </div>
-      )}
     </div>
   );
 }
