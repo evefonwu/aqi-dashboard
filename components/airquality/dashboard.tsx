@@ -4,11 +4,12 @@ import { SWRConfig } from "swr";
 import useSWR from "swr";
 import { Button } from "@/components/ui/button";
 import { DashboardSkeleton } from "@/components/skeletons";
+import { getColor, getAQILevel } from "./airquality-index";
+import { formatHour, truncateLocation, truncateName } from "./utils";
 import { RefreshCw } from "lucide-react";
 import {
   Table,
   TableBody,
-  //TableCaption,
   TableCell,
   TableHead,
   TableHeader,
@@ -47,13 +48,6 @@ const fetcher = async (url: string) => {
   return res.json();
 };
 
-// Helper function to convert hour to 12-hour format with AM/PM
-function formatHour(hour: number, timezone: string): string {
-  const period = hour >= 12 ? "PM" : "AM";
-  const formattedHour = hour % 12 || 12; // Convert 0 to 12 for 12 AM
-  return `${formattedHour}:00 ${period} ${timezone}`;
-}
-
 // Find the reading with highest AQI value from an array of readings
 function getHighestAQIReading(
   readings: AirQualityReading[]
@@ -63,55 +57,6 @@ function getHighestAQIReading(
   return readings.reduce((highest, current) => {
     return current.AQI > highest.AQI ? current : highest;
   }, readings[0]);
-}
-
-// Import or define color utility functions
-export const getColor = (level: number) => {
-  switch (level) {
-    case 1:
-      return "bg-[#00E400]";
-    case 2:
-      return "bg-[#FFFF00]";
-    case 3:
-      return "bg-[#FF7E00]";
-    case 4:
-      return "bg-[#FF0000]";
-    case 5:
-      return "bg-[#99004C]";
-    case 6:
-      return "bg-[#7E0023]";
-    default:
-      return "bg-gray-300";
-  }
-};
-
-export const levels = [
-  { level: 1, category: "Good", range: "0-50", color: getColor(1) },
-  { level: 2, category: "Moderate", range: "51-100", color: getColor(2) },
-  {
-    level: 3,
-    category: "Unhealthy for Sensitive Groups",
-    range: "101-150",
-    color: getColor(3),
-  },
-  { level: 4, category: "Unhealthy", range: "151-200", color: getColor(4) },
-  {
-    level: 5,
-    category: "Very Unhealthy",
-    range: "201-300",
-    color: getColor(5),
-  },
-  { level: 6, category: "Hazardous", range: "301-500", color: getColor(6) },
-];
-
-// Function to get appropriate AQI level from AQI value
-function getAQILevel(aqi: number): number {
-  if (aqi <= 50) return 1;
-  if (aqi <= 100) return 2;
-  if (aqi <= 150) return 3;
-  if (aqi <= 200) return 4;
-  if (aqi <= 300) return 5;
-  return 6;
 }
 
 function AirQualityDisplay() {
@@ -137,12 +82,10 @@ function AirQualityDisplay() {
   // Check for no saved locations before error state
   if (!data || data.length === 0) {
     return (
-      <>
-        <p>
-          You have no saved locations. Go to the Locations page to add your
-          locations.
-        </p>
-      </>
+      <p>
+        You have no saved locations. Go to the Locations page to add your
+        locations.
+      </p>
     );
   }
 
@@ -208,7 +151,7 @@ function AirQualityDisplay() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px] text-center">AQI</TableHead>
-            <TableHead className="w-[80px] text-center"></TableHead>
+            <TableHead className="w-[130px] text-center"></TableHead>
             <TableHead className="text-center"></TableHead>
           </TableRow>
         </TableHeader>
@@ -238,14 +181,14 @@ function AirQualityDisplay() {
                   <TableCell className="text-center font-medium text-lg">
                     {reading.AQI}
                     <div className="mt-1 text-xs text-muted-foreground">
-                      {levels.find((level) => level.level === aqiLevel)
-                        ?.category || reading.Category.Name}
+                      <p className="text-wrap">{reading.Category.Name}</p>
                     </div>
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-col gap-1">
                       <div className="font-medium">
-                        {item!.nickname} in {item!.location}
+                        {truncateName(item!.nickname)} in{" "}
+                        {truncateLocation(item!.location)}
                         {/* ({reading.ParameterName}) */}
                       </div>
                       <div className="text-xs text-muted-foreground">

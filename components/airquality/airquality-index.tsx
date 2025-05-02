@@ -29,6 +29,15 @@ export const getColor = (level: number) => {
   }
 };
 
+export function getAQILevel(aqi: number): number {
+  if (aqi <= 50) return 1;
+  if (aqi <= 100) return 2;
+  if (aqi <= 150) return 3;
+  if (aqi <= 200) return 4;
+  if (aqi <= 300) return 5;
+  return 6;
+}
+
 const levels = [
   { level: 1, category: "Good", range: "0-50", color: getColor(1) },
   { level: 2, category: "Moderate", range: "51-100", color: getColor(2) },

@@ -1,3 +1,22 @@
+code review, create utils for helper functions
+
+hover over refresh button, show tooltip
+
+check accessibility aria-label
+
+check dashboard states and UI:
+
+- when no saved location
+- error in getting air quality data
+- loading data
+- displayed data
+
+# Project In Progress ~
+
+Notes/Log -
+
+# populating air quality data for dashboard
+
 creating an API endpoint to fetch data from AirNow API:
 
 - storing API environment variables server-side
@@ -5,10 +24,6 @@ creating an API endpoint to fetch data from AirNow API:
 - api route will fetch air quality data for all saved locations with a Promise.all for a combined result
 
 client-side data fetching with useSWR for caching, automatic refreshes and retries
-
-# Project In Progress ~
-
-Notes/Log -
 
 # styling ui, make consistent, truncate text
 
