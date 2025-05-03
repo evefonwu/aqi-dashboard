@@ -2,6 +2,10 @@
 
 Notes/Log -
 
+check try/catch exceptions
+add global not-found page
+add site metadata
+
 # checking UI states
 
 code review, create utils for helper functions

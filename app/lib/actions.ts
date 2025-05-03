@@ -40,6 +40,10 @@ export async function createLocation(formData: FormData) {
 }
 
 export async function deleteLocation(id: string) {
-  await sql`DELETE FROM userLocations WHERE id = ${id}`;
+  try {
+    await sql`DELETE FROM userLocations WHERE id = ${id}`;
+  } catch (error) {
+    console.log(error);
+  }
   revalidatePath("/locations");
 }
