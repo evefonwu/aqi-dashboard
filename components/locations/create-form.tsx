@@ -143,6 +143,7 @@ export default function CreateForm() {
             <Button
               type="button"
               variant="outline"
+              className="w-[80px]"
               aria-label="Cancel and return to locations list"
               onClick={() => {
                 form.reset();
@@ -154,18 +155,20 @@ export default function CreateForm() {
             </Button>
             <Button
               variant="default"
+              className="w-[80px]"
               aria-label="Add a new location"
               type="submit"
               disabled={isPending}
             >
               {isPending ? (
                 <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  <Loader2 className="h-4 w-4 animate-spin" />
                   <span className="sr-only">Adding...</span>
                 </>
               ) : (
                 <>
-                  Add <PlusCircle className="mr-2 h-4 w-4" />
+                  <span>Add</span>
+                  <PlusCircle className="ml-2 h-4 w-4" />
                 </>
               )}
             </Button>
