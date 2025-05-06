@@ -28,11 +28,11 @@ export default function Page() {
         </Suspense>
       </CardContent>
       <CardFooter>
-        <Link href="/locations/create">
-          <Button aria-label="Link to create new location page">
-            Add <MoveRight className="mr-2 h-4 w-4" />
-          </Button>
-        </Link>
+        <Button aria-label="Link to create new location" asChild>
+          <Link href="/locations/create">
+            Add <MoveRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
       </CardFooter>
     </Card>
   );
