@@ -19,7 +19,7 @@ export default async function LocationsTable() {
   return (
     <Table className="py-5">
       <TableCaption>
-        {locations.length > 0
+        {locations && locations.length > 0
           ? "A list of your added locations."
           : "To add your locations, click the 'Add' button."}
       </TableCaption>
