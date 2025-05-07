@@ -19,7 +19,7 @@ import { z } from "zod";
 import { useTransition } from "react";
 import { redirect } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { LocationAutocomplete } from "@/components/locations/autocomplete";
+import { LocationAutocomplete } from "./autocomplete";
 import { LocationSearchResult } from "@/app/lib/definitions";
 
 const formSchema = z.object({
@@ -126,8 +126,6 @@ export default function CreateForm() {
                 <FormControl>
                   <LocationAutocomplete
                     onLocationSelect={handleLocationSelect}
-                    className="w-full"
-                    placeholder={field.value || "Enter city, state or ZIP code"}
                   />
                 </FormControl>
                 <FormDescription id="location-description">

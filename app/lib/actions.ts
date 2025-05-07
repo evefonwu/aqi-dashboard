@@ -17,7 +17,7 @@ const FormSchema = z.object({
 const CreateLocation = FormSchema.omit({ id: true, date: true });
 
 export async function createLocation(formData: FormData) {
-  //console.log(formData);
+  // console.log(formData);
 
   try {
     const { nickname, location, zip } = CreateLocation.parse({
@@ -46,5 +46,6 @@ export async function deleteLocation(id: string) {
   } catch (error) {
     console.error(error);
   }
+
   revalidatePath("/locations");
 }

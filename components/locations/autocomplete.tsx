@@ -5,30 +5,25 @@ import { Check } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
+  CommandList,
 } from "@/components/ui/command";
 import { useDebounce } from "@/components/hooks/useDebounce";
-import { searchLocations } from "@/app/lib/actions-uslocations";
 import { LocationSearchResult } from "@/app/lib/definitions";
 import { Skeleton } from "@/components/ui/skeleton";
-
-interface LocationAutocompleteProps {
-  onLocationSelect?: (location: LocationSearchResult | null) => void;
-  placeholder?: string;
-  className?: string;
-}
+import { searchLocations } from "@/app/lib/actions-uslocations";
 
 export function LocationAutocomplete({
   onLocationSelect,
-  placeholder = "Enter city, state or ZIP code",
-  className,
-}: LocationAutocompleteProps) {
+}: {
+  onLocationSelect: (location: LocationSearchResult | null) => void;
+}) {
+  const [suggestions, setSuggestions] = useState<LocationSearchResult[]>([]);
   const [query, setQuery] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [locations, setLocations] = useState<LocationSearchResult[]>([]);
+  const [open, setOpen] = useState(false);
 
   const [selectedLocation, setSelectedLocation] =
     useState<LocationSearchResult | null>(null);
@@ -38,16 +33,19 @@ export function LocationAutocomplete({
   useEffect(() => {
     const fetchLocations = async () => {
       if (debouncedQuery.length < 2) {
-        setLocations([]);
+        setSuggestions([]);
+        setOpen(false);
         return;
       }
 
       setLoading(true);
       try {
         const results = await searchLocations(debouncedQuery);
-        setLocations(results);
+        setSuggestions(results);
+        setOpen(results.length > 0);
       } catch (error) {
-        console.error("Failed to fetch locations:", error);
+        console.error("Failed to retrieve locations for autocomplete:", error);
+        setSuggestions([]);
       } finally {
         setLoading(false);
       }
@@ -56,50 +54,54 @@ export function LocationAutocomplete({
     fetchLocations();
   }, [debouncedQuery]);
 
-  const handleSelect = (location: LocationSearchResult) => {
-    setQuery(location.label);
-    setSelectedLocation(location);
-    // reset
-    setLocations([]);
-    if (onLocationSelect) {
+  const handleSelect = (value: string) => {
+    const location = suggestions.find((item) => item.label === value);
+    if (location) {
+      setQuery(location.label);
+      setSelectedLocation(location);
+      setSuggestions([]);
       onLocationSelect(location);
+      setOpen(false);
     }
   };
 
   return (
-    <Command className={cn("rounded-md border shadow-md", className)}>
+    <Command className="rounded-md border shadow-md">
       <CommandInput
-        placeholder={placeholder}
+        placeholder="Enter city, state or ZIP code"
         value={query}
         onValueChange={setQuery}
       />
-      <CommandEmpty></CommandEmpty>
-      {loading ? (
-        <div className="p-2">
-          <Skeleton className="h-8 w-full" />
-          <Skeleton className="h-8 w-full mt-2" />
-          <Skeleton className="h-8 w-full mt-2" />
-        </div>
-      ) : (
-        <CommandGroup heading="Suggestions">
-          {locations.map((location) => (
-            <CommandItem
-              key={location.id}
-              value={location.label}
-              onSelect={() => handleSelect(location)}
-            >
-              <Check
-                className={cn(
-                  "mr-2 h-4 w-4",
-                  selectedLocation?.id === location.id
-                    ? "opacity-100"
-                    : "opacity-0"
-                )}
-              />
-              {location.label}
-            </CommandItem>
-          ))}
-        </CommandGroup>
+      {open && (
+        <CommandList>
+          {loading ? (
+            <div className="p-2">
+              <Skeleton className="h-8 w-full" />
+              <Skeleton className="h-8 w-full mt-2" />
+              <Skeleton className="h-8 w-full mt-2" />
+            </div>
+          ) : (
+            <CommandGroup heading="Suggestions">
+              {suggestions.map((suggestion) => (
+                <CommandItem
+                  key={suggestion.id}
+                  value={suggestion.label}
+                  onSelect={handleSelect}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      selectedLocation?.id === suggestion.id
+                        ? "opacity-100"
+                        : "opacity-0"
+                    )}
+                  />
+                  {suggestion.label}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          )}
+        </CommandList>
       )}
     </Command>
   );
