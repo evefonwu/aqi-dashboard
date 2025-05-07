@@ -19,7 +19,7 @@ import { z } from "zod";
 import { useTransition } from "react";
 import { redirect } from "next/navigation";
 import { Loader2 } from "lucide-react";
-import { LocationAutocomplete } from "./autocomplete";
+import { LocationAutocomplete } from "@/components/locations/autocomplete";
 import { LocationSearchResult } from "@/app/lib/definitions";
 
 const formSchema = z.object({
