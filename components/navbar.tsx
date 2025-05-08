@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 export default function NavBar() {
   const pathname = usePathname();
+
   const baseLink =
     "flex h-[35px] grow items-center justify-center bg-gray-100 text-sm font-medium border-3 border-transparent";
 
