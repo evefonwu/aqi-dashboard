@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { fetchLocations } from "@/app/lib/queries";
-import { UserLocations } from "@/app/lib/definitions";
+import { UserLocation } from "@/app/lib/definitions";
 
 // server-side env vars
 const base = process.env.AIRNOW_BASE_URL;
@@ -41,7 +41,7 @@ export async function GET() {
     }
 
     // multiple requests in parallel
-    const airQualityPromises = locations.map(async (loc: UserLocations) => {
+    const airQualityPromises = locations.map(async (loc: UserLocation) => {
       const airQualityData = await fetchAirQualityData(loc.zipcode);
       return {
         id: loc.id,
