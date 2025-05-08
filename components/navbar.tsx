@@ -10,7 +10,7 @@ export default function NavBar() {
   const baseLink =
     "flex h-[35px] grow items-center justify-center bg-gray-100 text-sm font-medium border-3 border-transparent";
 
-  const focusLink =
+  const styleOnFocus =
     "focus:outline-none focus:relative focus:z-10 focus:border-gray-300";
 
   return (
@@ -19,7 +19,7 @@ export default function NavBar() {
         key={1}
         href="/"
         aria-label="Link to About page"
-        className={cn(baseLink, "rounded-l-md", focusLink, {
+        className={cn(baseLink, "rounded-l-md", styleOnFocus, {
           "bg-teal-700 text-white": pathname === "/",
         })}
       >
@@ -29,7 +29,7 @@ export default function NavBar() {
         key={2}
         href="/dashboard"
         aria-label="Link to Air Quality Dashboard page"
-        className={cn(baseLink, focusLink, {
+        className={cn(baseLink, styleOnFocus, {
           "bg-teal-700 text-white": pathname === "/dashboard",
         })}
       >
@@ -39,7 +39,7 @@ export default function NavBar() {
         key={3}
         href="/locations"
         aria-label="Link to Locations page"
-        className={cn(baseLink, "rounded-r-md", focusLink, {
+        className={cn(baseLink, "rounded-r-md", styleOnFocus, {
           "bg-teal-700 text-white": pathname === "/locations",
         })}
       >
