@@ -14,7 +14,7 @@ export type LocationSearchResult = {
   label: string; // formatted display for autocomplete
 };
 
-export type UserLocations = {
+export type UserLocation = {
   // matching user_locations data
   id: string;
   nickname: string;
