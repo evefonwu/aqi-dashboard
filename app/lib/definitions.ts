@@ -1,4 +1,5 @@
 export type Location = {
+  // matching us locations data
   id: number;
   zip: string;
   city: string;
@@ -10,13 +11,15 @@ export type LocationSearchResult = {
   zip: string;
   city: string;
   state: string;
-  label: string; // Formatted display for the autocomplete
+  label: string; // formatted display for autocomplete
 };
 
-export type UserSavedLocation = {
-  id: string; // will be created on the database
+export type UserLocations = {
+  // matching user_locations data
+  id: string;
   nickname: string;
-  location: string;
+  city: string;
+  state: string;
   zipcode: string;
-  date: string;
+  created_at: string;
 };

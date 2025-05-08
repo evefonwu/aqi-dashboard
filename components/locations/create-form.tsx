@@ -2,6 +2,7 @@
 
 import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import {
   Form,
@@ -12,65 +13,70 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { createLocation } from "@/app/lib/actions";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useTransition } from "react";
 import { redirect } from "next/navigation";
-import { Loader2 } from "lucide-react";
-import { LocationAutocomplete } from "@/components/locations/autocomplete";
-import { LocationSearchResult } from "@/app/lib/definitions";
+import { createLocation } from "@/app/lib/actions";
 
-const formSchema = z.object({
+// user selected location is of type LocationSearchResult
+import { LocationSearchResult } from "@/app/lib/definitions";
+import { LocationAutocomplete } from "@/components/locations/autocomplete";
+
+// client-side user input validations
+const FormSchema = z.object({
   nickname: z.string().min(2, {
     message: "Please enter a valid name.",
   }),
   location: z.string().min(1, {
     message: "Please select a valid location.",
   }),
-  // store user selected location value
-  dataToStore: z
+  data: z
     .object({
-      formatted: z.string(), // formatted for dashboard table
-      zip: z.string(),
+      city: z.string(),
+      state: z.string(),
+      zipcode: z.string(),
     })
     .optional(),
+  // optional because these can be reset to null when no selection
 });
 
 export default function CreateForm() {
+  // marking a state update as a Transition
   const [isPending, startTransition] = useTransition();
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  // accessible type-safe form with client-side validations for nickname and location
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
     defaultValues: {
       nickname: "",
       location: "",
-      dataToStore: undefined,
     },
     mode: "onBlur",
     reValidateMode: "onChange",
   });
 
-  // handle location selected from autocomplete component
+  // validate user input, set into formData
   const handleLocationSelect = (
     selectedLocation: LocationSearchResult | null
   ) => {
-    // only if there's a valid selection in a location data object
+    // if user selected a location
     if (selectedLocation) {
-      // location.label is the full city, state zip display name
       form.setValue("location", selectedLocation.label, {
         shouldValidate: true,
       });
 
-      form.setValue("dataToStore", {
-        formatted: selectedLocation.city + ", " + selectedLocation.state,
-        zip: selectedLocation.zip,
+      form.setValue("data", {
+        city: selectedLocation.city,
+        state: selectedLocation.state,
+        zipcode: selectedLocation.zip,
       });
     } else {
       // reset when selection is cleared
       form.setValue("location", "", { shouldValidate: true });
-      form.setValue("dataToStore", undefined);
+      form.setValue("data", undefined);
     }
   };
 
@@ -78,17 +84,19 @@ export default function CreateForm() {
     <Form {...form}>
       <form
         action={async (formData) => {
-          // validate entire form before submission
+          // validate form before invoking server action
           const isValid = await form.trigger();
-          if (!isValid) {
-            return;
+          if (!isValid) return;
+
+          // populate formData object with validated input
+          const validated = form.getValues();
+          if (validated.data) {
+            formData.set("city", validated.data.city);
+            formData.set("state", validated.data.state);
+            formData.set("zipcode", validated.data.zipcode);
           }
-          // add formatted and zip to formData before sending it to server action fn/db
-          const validatedFields = form.getValues();
-          if (validatedFields.dataToStore) {
-            formData.set("location", validatedFields.dataToStore.formatted);
-            formData.set("zip", validatedFields.dataToStore.zip);
-          }
+
+          // transition
           startTransition(() => createLocation(formData));
         }}
         noValidate
@@ -122,7 +130,7 @@ export default function CreateForm() {
             name="location"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel htmlFor={field.name}>Location</FormLabel>
+                <FormLabel htmlFor={field.name}>Nickname</FormLabel>
                 <FormControl>
                   <LocationAutocomplete
                     onLocationSelect={handleLocationSelect}
@@ -153,9 +161,9 @@ export default function CreateForm() {
             </Button>
             <Button
               variant="default"
-              className="w-[80px]"
               aria-label="Add a new location"
               type="submit"
+              className="w-[80px]"
               disabled={isPending}
             >
               {isPending ? (
@@ -166,7 +174,7 @@ export default function CreateForm() {
               ) : (
                 <>
                   <span>Add</span>
-                  <PlusCircle className="ml-2 h-4 w-4" />
+                  <PlusCircle className="ml-1 h-4 w-4" />
                 </>
               )}
             </Button>

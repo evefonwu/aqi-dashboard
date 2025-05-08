@@ -1,14 +1,11 @@
 ```sql
--- CREATE TABLE IF NOT EXISTS users (
---   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
---   name VARCHAR(255) NOT NULL,
--- );
-
-CREATE TABLE IF NOT EXISTS userLocations (
+--- storing elemental values city, state instead of derived 'location' value
+CREATE TABLE IF NOT EXISTS user_locations (
   id UUID DEFAULT uuid_generate_v4() PRIMARY KEY,
-  nickname VARCHAR(255) NOT NULL,
-  location VARCHAR(255) NOT NULL,
-  zipcode VARCHAR(255) NOT NULL,
-  date DATE NOT NULL
+  nickname VARCHAR(100) NOT NULL,
+  city VARCHAR(50) NOT NULL,
+  state VARCHAR(50),
+  zipcode VARCHAR(20) NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL
 );
 ```

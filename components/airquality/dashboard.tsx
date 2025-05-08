@@ -34,7 +34,8 @@ interface AirQualityReading {
 interface LocationAirQualityData {
   id: number;
   nickname: string;
-  location: string;
+  city: string;
+  state: string;
   zipcode: string;
   airQualityData: AirQualityReading[] | { error: string };
 }
@@ -133,7 +134,8 @@ function AirQualityDisplay() {
 
       return {
         nickname: loc.nickname,
-        location: loc.location,
+        city: loc.city,
+        state: loc.state,
         zipcode: loc.zipcode,
         reading: highestReading,
       };
@@ -169,7 +171,7 @@ function AirQualityDisplay() {
               const reading = item!.reading;
               const aqiLevel = getAQILevel(reading.AQI);
               return (
-                <TableRow key={`${item!.location}-${index}`}>
+                <TableRow key={`${item!.zipcode}-${index}`}>
                   <TableCell className="text-center">
                     <div
                       className={`h-6 w-6 rounded-full mx-auto ${getColor(
@@ -187,7 +189,7 @@ function AirQualityDisplay() {
                     <div className="flex flex-col gap-1">
                       <div className="font-medium">
                         {truncateName(item!.nickname)} in{" "}
-                        {truncateLocation(item!.location)}
+                        {truncateLocation(item!.city)}
                         {/* ({reading.ParameterName}) */}
                       </div>
                       <div className="text-xs text-muted-foreground">

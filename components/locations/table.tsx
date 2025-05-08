@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table";
 import { fetchLocations } from "@/app/lib/queries";
 import { DeleteForm } from "./delete-form";
-
 // async fetch location data and display it in a responsive table
 
 // async await retrieving locations data...
@@ -43,7 +42,7 @@ export default async function LocationsTable() {
             <TableCell>
               <div className="max-w-[200px]">
                 <p className="truncate">
-                  {loc.location} {loc.zipcode}
+                  {loc.city}, {loc.state} {loc.zipcode}
                 </p>
               </div>
             </TableCell>

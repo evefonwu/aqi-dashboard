@@ -1,14 +1,11 @@
 import postgres from "postgres";
+import { UserLocations } from "./definitions";
 
-import { UserSavedLocation } from "./definitions";
-
-const sql = postgres(process.env.DATABASE_URL!, { ssl: "require" });
+const sql = postgres(process.env.POSTGRES_URL!, { ssl: "require" });
 
 export async function fetchLocations() {
-  // console.log("Getting user locations data from database...");
-
   try {
-    const data = await sql<UserSavedLocation[]>`SELECT * from userLocations`;
+    const data = await sql<UserLocations[]>`SELECT * from user_locations`;
     return data;
   } catch (error) {
     console.error("database error:", error);
