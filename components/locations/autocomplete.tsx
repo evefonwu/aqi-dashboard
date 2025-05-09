@@ -21,18 +21,18 @@ export function LocationAutocomplete({
   onLocationSelect: (location: LocationSearchResult | null) => void;
 }) {
   const [suggestions, setSuggestions] = useState<LocationSearchResult[]>([]);
-  const [query, setQuery] = useState<string>("");
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [open, setOpen] = useState(false);
 
   const [selectedLocation, setSelectedLocation] =
     useState<LocationSearchResult | null>(null);
 
-  const debouncedQuery = useDebounce(query, 300);
+  const debouncedSearchTerm = useDebounce(searchTerm);
 
   useEffect(() => {
     const fetchLocations = async () => {
-      if (debouncedQuery.length < 2) {
+      if (debouncedSearchTerm.length < 2) {
         setSuggestions([]);
         setOpen(false);
         return;
@@ -40,7 +40,7 @@ export function LocationAutocomplete({
 
       setLoading(true);
       try {
-        const results = await searchLocations(debouncedQuery);
+        const results = await searchLocations(debouncedSearchTerm);
         setSuggestions(results);
         setOpen(results.length > 0);
       } catch (error) {
@@ -52,12 +52,12 @@ export function LocationAutocomplete({
     };
 
     fetchLocations();
-  }, [debouncedQuery]);
+  }, [debouncedSearchTerm]);
 
   const handleSelect = (value: string) => {
     const location = suggestions.find((item) => item.label === value);
     if (location) {
-      setQuery(location.label);
+      setSearchTerm(location.label);
       setSelectedLocation(location);
       setSuggestions([]);
       onLocationSelect(location);
@@ -69,8 +69,8 @@ export function LocationAutocomplete({
     <Command className="rounded-md border shadow-md">
       <CommandInput
         placeholder="Enter city, state or ZIP code"
-        value={query}
-        onValueChange={setQuery}
+        value={searchTerm}
+        onValueChange={setSearchTerm}
       />
       {open && (
         <CommandList>
