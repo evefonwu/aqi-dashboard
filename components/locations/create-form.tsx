@@ -130,7 +130,7 @@ export default function CreateForm() {
             name="location"
             render={({ field }) => (
               <FormItem className="flex flex-col">
-                <FormLabel htmlFor={field.name}>Nickname</FormLabel>
+                <FormLabel htmlFor={field.name}>Location</FormLabel>
                 <FormControl>
                   <LocationAutocomplete
                     onLocationSelect={handleLocationSelect}
