@@ -1,22 +1,18 @@
 import { NextResponse } from "next/server";
-import { fetchLocations } from "@/app/lib/queries";
 import { UserLocation } from "@/app/lib/definitions";
+import { fetchLocations } from "@/app/lib/queries";
 
 // server-side env vars
 const base = process.env.AIRNOW_BASE_URL;
 const apikey = process.env.AIRNOW_API_KEY;
 
-const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
-
-function getAirNowUrl(zip: string) {
-  // construct API URL for observed AirNow AQI data, today by zipcode
-  const url = `${base}&zipCode=${zip}&date=${today}&distance=150&API_KEY=${apikey}`;
-  return url;
-}
-
+// fetch observed AirNow AQI data, today by zipcode
 async function fetchAirQualityData(zip: string) {
   try {
-    const response = await fetch(getAirNowUrl(zip));
+    const today = new Date().toISOString().split("T")[0]; // yyyy-mm-dd
+    const url = `${base}&zipCode=${zip}&date=${today}&distance=150&API_KEY=${apikey}`;
+    const response = await fetch(url);
+
     if (!response.ok) {
       throw new Error(`AirNow API responded with status: ${response.status}`);
     }
@@ -30,17 +26,7 @@ async function fetchAirQualityData(zip: string) {
 // GET endpoint to fetch air quality for all saved locations
 export async function GET() {
   try {
-    // retrieve all saved locations from db
     const locations = await fetchLocations();
-
-    if (!locations || locations.length === 0) {
-      return NextResponse.json(
-        { message: "No saved locations found" },
-        { status: 404 }
-      );
-    }
-
-    // multiple requests in parallel
     const airQualityPromises = locations.map(async (loc: UserLocation) => {
       const airQualityData = await fetchAirQualityData(loc.zipcode);
       return {
@@ -53,11 +39,12 @@ export async function GET() {
       };
     });
     const results = await Promise.all(airQualityPromises);
-
-    // return combined results
     return NextResponse.json(results);
   } catch (error) {
-    console.error("Error in air quality API route:", error);
+    console.error(
+      "Error in fetching air quality data for saved locations:",
+      error
+    );
     return NextResponse.json(
       { error: "Failed to fetch air quality data for saved locations" },
       { status: 500 }

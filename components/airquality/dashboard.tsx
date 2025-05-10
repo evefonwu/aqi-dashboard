@@ -3,8 +3,14 @@
 import useSWR, { SWRConfig } from "swr";
 import { Button } from "@/components/ui/button";
 import { DashboardSkeleton } from "@/components/skeletons";
-import { getColor, getAQILevel } from "./airquality-index";
-import { formatHour, truncateLocation, truncateName } from "./utils";
+import {
+  formatHour,
+  truncateName,
+  truncateLocation,
+  getAQILevel,
+  getAQIColor,
+} from "./utils";
+
 import { RefreshCw } from "lucide-react";
 import {
   Table,
@@ -50,14 +56,6 @@ function AirQualityDisplay() {
 
   if (isLoading) return <DashboardSkeleton />;
 
-  if (!data || data.length === 0) {
-    return (
-      <p className="text-center py-6 text-muted-foreground">
-        To add your locations, go to the Locations page.
-      </p>
-    );
-  }
-
   if (error) {
     return (
       <div className="flex items-center justify-between">
@@ -74,6 +72,14 @@ function AirQualityDisplay() {
           Try Again
         </Button>
       </div>
+    );
+  }
+
+  if (!data || data.length === 0) {
+    return (
+      <p className="text-center py-6 text-muted-foreground">
+        To add your locations, go to the Locations page.
+      </p>
     );
   }
 
@@ -144,7 +150,7 @@ function AirQualityDisplay() {
                 <TableRow key={`${item!.zipcode}-${index}`}>
                   <TableCell className="text-center">
                     <div
-                      className={`h-6 w-6 rounded-full mx-auto ${getColor(
+                      className={`h-6 w-6 rounded-full mx-auto ${getAQIColor(
                         aqiLevel
                       )}`}
                     ></div>
