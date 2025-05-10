@@ -33,7 +33,7 @@ export default async function LocationsTable() {
         {locations?.map((loc) => (
           <TableRow key={loc.id}>
             <TableCell className="font-medium">
-              <div className="max-w-[130px]">
+              <div className="max-w-[100px]">
                 <p className="truncate" title={loc.nickname}>
                   {loc.nickname}
                 </p>
@@ -41,7 +41,7 @@ export default async function LocationsTable() {
             </TableCell>
             <TableCell>
               <div className="max-w-[200px]">
-                <p className="truncate">
+                <p className="text-wrap">
                   {loc.city}, {loc.state} {loc.zipcode}
                 </p>
               </div>

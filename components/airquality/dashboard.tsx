@@ -1,7 +1,6 @@
 "use client";
 
-import { SWRConfig } from "swr";
-import useSWR from "swr";
+import useSWR, { SWRConfig } from "swr";
 import { Button } from "@/components/ui/button";
 import { DashboardSkeleton } from "@/components/skeletons";
 import { getColor, getAQILevel } from "./airquality-index";
@@ -16,40 +15,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-// Define types
-interface AirQualityReading {
-  DateObserved: string;
-  HourObserved: number;
-  LocalTimeZone: string;
-  ReportingArea: string;
-  StateCode: string;
-  ParameterName: string;
-  AQI: number;
-  Category: {
-    Number: number;
-    Name: string;
-  };
-}
+import { AirQualityReading, LocationAirQualityData } from "./definitions";
 
-interface LocationAirQualityData {
-  id: number;
-  nickname: string;
-  city: string;
-  state: string;
-  zipcode: string;
-  airQualityData: AirQualityReading[] | { error: string };
-}
-
-// Fetcher function for SWR
-const fetcher = async (url: string) => {
-  const res = await fetch(url);
-  if (!res.ok) {
-    throw new Error(`Failed to fetch: ${res.status} ${res.statusText}`);
-  }
-  return res.json();
-};
-
-// Find the reading with highest AQI value from an array of readings
 function getHighestAQIReading(
   readings: AirQualityReading[]
 ): AirQualityReading | null {
@@ -60,27 +27,29 @@ function getHighestAQIReading(
   }, readings[0]);
 }
 
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error(
+      `Failed to fetch air quality data: ${res.status} ${res.statusText}`
+    );
+  }
+  return res.json();
+};
+
+const swrKey = "/api/air-quality";
+
 function AirQualityDisplay() {
   const { data, error, isLoading, isValidating, mutate } = useSWR<
     LocationAirQualityData[]
-  >("/api/air-quality", fetcher, {
-    refreshInterval: 3 * 60 * 60 * 1000, // Refresh every 3 hours
-    dedupingInterval: 5000, // Deduplicate requests within 5 seconds
-    revalidateOnFocus: true, // Revalidate when window gets focus
-    revalidateOnReconnect: true, // Revalidate when browser regains connection
-  });
+  >(swrKey, fetcher);
 
-  // Function to manually refresh data
-  const refreshData = () => {
+  function refreshData() {
     mutate();
-  };
-
-  // Loading state
-  if (isLoading) {
-    return <DashboardSkeleton />;
   }
 
-  // Check for no saved locations before error state
+  if (isLoading) return <DashboardSkeleton />;
+
   if (!data || data.length === 0) {
     return (
       <p className="text-center py-6 text-muted-foreground">
@@ -89,12 +58,13 @@ function AirQualityDisplay() {
     );
   }
 
-  // Error state
   if (error) {
     return (
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span>Error: {error.message}</span>
+          <p className="text-center py-6 text-muted-foreground">
+            Error: Failed to retrieve data.
+          </p>
         </div>
         <Button
           variant="outline"
@@ -214,15 +184,16 @@ function AirQualityDisplay() {
           variant="outline"
           disabled={isValidating}
           aria-label="Refresh air quality dashboard data"
-          className="flex items-center"
         >
           {isValidating ? (
             <>
-              Refresh Data <RefreshCw className="h-4 w-4 animate-spin" />
+              <span>Refresh Data</span>
+              <RefreshCw className="h-4 w-4 animate-spin" />
             </>
           ) : (
             <>
-              Refresh Data <RefreshCw className="h-4 w-4" />
+              <span>Refresh Data</span>
+              <RefreshCw className="h-4 w-4" />
             </>
           )}
         </Button>
@@ -241,7 +212,8 @@ export default function Dashboard() {
   return (
     <SWRConfig
       value={{
-        provider: () => new Map(),
+        refreshInterval: 3 * 60 * 60 * 1000, // refresh every 3hrs
+        dedupingInterval: 5 * 1000, // dedup requests within 5s
         revalidateIfStale: true,
         revalidateOnFocus: true,
         revalidateOnReconnect: true,
