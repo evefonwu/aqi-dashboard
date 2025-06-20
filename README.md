@@ -1,5 +1,7 @@
 # Air Quality Dashboard In Progress ~
 
+renamed repo to aqi-dashboard
+
 Notes/Log -
 
 - check try/catch exceptions
