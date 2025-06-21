@@ -1,6 +1,4 @@
-# Air Quality Dashboard In Progress ~
-
-renamed repo to aqi-dashboard
+# Air Quality Dashboard
 
 Notes/Log -
 
